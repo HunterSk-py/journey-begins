@@ -84,7 +84,7 @@ def player():
                     zombie.pop(zombie.index(i))
                     bullets.pop(bullets.index(bullet))
                     score_value += 10
-        elif ((i.x-hudle_x)- hero_x)**2 <= 50**2:
+        if((i.x-hudle_x)- hero_x)**2 <= 50**2:
             dead = True
             display_message()
         
