@@ -1,7 +1,7 @@
 #Importing Pygame
 import pygame
 import random
-import time
+
 
 #Initializing
 pygame.init()
@@ -12,11 +12,18 @@ pygame.display.set_caption("Journey Begins")
 icon = pygame.image.load("img\icon1.png")
 pygame.display.set_icon(icon)
 
+#Loading Music
+bulletSound = pygame.mixer.Sound('shoot_sound.wav')
+game_over_sound = pygame.mixer.Sound('game_over.mp3')
+
+music = pygame.mixer.music.load('ground_music.wav')
+pygame.mixer.music.play(-1)
+
 #Create wall
 def wallpaper():
     bg = pygame.image.load("img\wall1.png")
     scr.blit(bg,(0,0))
-
+#Some initial Variable
 wall_x = 0
 hudle_x = 0
 walk_count = 0
@@ -24,6 +31,7 @@ hudle_count = 0
 tree_count = 0
 zombie_count = 0
 
+#Reading last High score
 with open("data.txt",mode="r") as data:
     high_score_value = int(data.read())
 score_value = 0
@@ -31,6 +39,7 @@ score_text = pygame.font.Font("freesansbold.ttf",32)
 
 high_score_text = pygame.font.Font("freesansbold.ttf",32)
 
+#Display Score
 def display_score():
     global high_score_value
     score = score_text.render(f"Score: {score_value}",True,(255,255,255))
@@ -41,8 +50,8 @@ def display_score():
             data.write(str(score_value))
     high_score = high_score_text.render(f"High Score: {high_score_value}",True,(255,255,255))
     scr.blit(high_score,(10,85))
-    
 
+#Setting The platform
 def platform():
     global wall_x
     rock1 = pygame.image.load("img\ock3.png")
@@ -55,6 +64,7 @@ def platform():
     scr.blit(rock1,(800-wall_x,571))
 clock = pygame.time.Clock()
 
+#Creating The Player
 hero_y = 490
 hero_x = 250
 dead = False
@@ -97,6 +107,7 @@ def player():
     elif right:
         scr.blit(runRight[walk//5],(hero_x,hero_y))
         walk += 1
+#Bullet
 class Shot(object):
     def __init__(self,bullet_x,bullet_y,type,direction):
         self.x = bullet_x
@@ -110,7 +121,7 @@ class Shot(object):
         scr.blit(balls[self.type],(self.x,self.y))
         
 
-
+#Hudles
 class Hudle(object):
     tree = pygame.image.load("img\ee1.png")
     rock = pygame.image.load("img\ock.png")
@@ -123,7 +134,7 @@ class Hudle(object):
     def draw(self,scr):
         scr.blit(self.type,(self.x-hudle_x,self.y))
 
-
+#Zombies
 class Zom(object):
     zombie1_left = [pygame.image.load('img\zombie1a_left.png'), pygame.image.load('img\zombie1b_left.png'), pygame.image.load('img\zombie1c_left.png'), pygame.image.load('img\zombie1d_left.png')]
     zombie1_right = [pygame.image.load('img\zombie1a.png'), pygame.image.load('img\zombie1b.png'), pygame.image.load('img\zombie1c.png'), pygame.image.load('img\zombie1d.png')]
@@ -173,7 +184,7 @@ class Zom(object):
                 self.x += self.dir
                 self.walk_count = 0
 
-
+#Wolfs
 wolf_x = 10
 def wolf():
     global walk,wolf_x,standing
@@ -202,11 +213,14 @@ def wolf():
         
     elif right:
         scr.blit(wolf_right[walk//5],(wolf_x,470))
-
+#Display Gameover Massege
 def display_message():
         font = pygame.font.SysFont("freesansbold.ttf", 64, True)
         text = font.render("Game Over!", True, (255, 255, 255))
         scr.blit(text, (360,300))
+        game_over_sound.play()
+        
+        
         
 
         
@@ -257,6 +271,7 @@ standing = False
 h = 0
 total_x = 0
 a = 0
+
 #Mainloop
 while switch:
     clock.tick(50)
@@ -271,6 +286,8 @@ while switch:
             bullets.pop(bullets.index(bullet))
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
+        bulletSound.play()
+        
         if a >= 3:
             firing = True
             a += 1
@@ -342,16 +359,5 @@ while switch:
     for bullet in bullets:
         bullet.draw(scr)
     display_score()
-    
-    
-
-
-    
-
-
-
-   
-        
-    
 
     pygame.display.update()
