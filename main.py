@@ -215,10 +215,12 @@ def wolf():
         scr.blit(wolf_right[walk//5],(wolf_x,470))
 #Display Gameover Massege
 def display_message():
-        font = pygame.font.SysFont("freesansbold.ttf", 64, True)
-        text = font.render("Game Over!", True, (255, 255, 255))
-        scr.blit(text, (360,300))
-        game_over_sound.play()
+    global score_value
+    font = pygame.font.SysFont("freesansbold.ttf", 64, True)
+    text = font.render("Game Over!", True, (255, 255, 255))
+    scr.blit(text, (360,300))
+    game_over_sound.play()
+    score_value = 0
         
         
         
